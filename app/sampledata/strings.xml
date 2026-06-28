@@ -1,0 +1,17 @@
+<resources>>
+    <string name="app_name">Formative TW25</string>
+    <string name="etFirstname" />
+    <string name="etLastname" />
+    <string name="etEmail" />
+    <string name="etSignup" />
+    <string name="etCancel" />
+    <string name="etPassword" />
+    <string name="etConfirmPassword" />
+    <string name="hintFirstname" />
+    <string name="hintLirstname" />
+    <string name="hintEmail" />
+    <string name="hintPassword" />
+    <string name="hintConfirmPassword" />
+    //strings sa may login and signup
+    //yung sa fragments madali nalang yun if na aalala niyo
+</resources>
