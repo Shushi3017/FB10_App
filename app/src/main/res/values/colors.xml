@@ -5,4 +5,5 @@
 
     <!-- Existing color definitions -->
     <color name="purple_200">#FFBB86FC</color>
+    <color name="black"> #00000 </color>
 </resources>

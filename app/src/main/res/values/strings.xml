@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">FB10_App</string>
+    <string name="hint_email_address"> Enter your Email here </string>
+    <string name="hint_password"> Enter your password here </string>
+    <string name="hint_conf_password">Enter your confirmed password here</string>
+    <string name="hint_name"> Enter your Full Name here </string>
+    <string name="et_full_name">Full Name</string>
+    <string name="et_email_address">Email Address</string>
+    <string name="et_password">Password</string>
+    <string name="et_conf_password">Confirm Password</string>
+    <string name="btn_register">Register</string>
+    <string name="tv_registration">Registration</string>
 </resources>
