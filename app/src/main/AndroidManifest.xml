@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FB10_App">
         <activity
+            android:name=".MainActivity2"
+            android:exported="false" />
+        <activity
             android:name=".Pratice_Login"
             android:exported="false" />
         <activity
