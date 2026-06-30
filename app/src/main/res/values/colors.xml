@@ -5,5 +5,8 @@
 
     <!-- Existing color definitions -->
     <color name="purple_200">#FFBB86FC</color>
-    <color name="black"> #00000 </color>
+    <color name="black"> #000000 </color>
+    <color name="yellow">#FFF200</color>
+    <color name="white"> #FFFFFF </color>
+    <color name="darkgray">#6E6F71</color>
 </resources>
