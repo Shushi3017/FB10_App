@@ -2,9 +2,9 @@
 <resources>
     <!-- Base application theme for night mode -->
     <style name="Theme.FB10_App" parent="Theme.Material3.DayNight.NoActionBar">
-
+//night theme
         <item name="android:windowBackground">#121212</item>
 
-        <item name="android:textColorPrimary">#FFEB3B</item>
+        <item name="android:textColorPrimary">#FFFFFF</item>
     </style>
 </resources>

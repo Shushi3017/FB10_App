@@ -2,7 +2,7 @@
 <resources>
     <!-- Base application theme -->
     <style name="Theme.FB10_App" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Core Material 3 color tokens -->
+        <!-- light theme -->
         <item name="android:windowBackground">#FFFFFF</item>
 
         <!-- Fixes potential crash related to missing text attributes -->
