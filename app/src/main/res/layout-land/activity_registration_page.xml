@@ -9,7 +9,7 @@
     tools:context=".RegistrationPage">
 
     <com.google.android.material.materialswitch.MaterialSwitch
-        android:id="@+id/themeSwitch3"
+        android:id="@+id/themeSwitch1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -27,7 +27,9 @@
         android:textFontWeight="600"
         android:text="@string/et_full_name"
         app:layout_constraintBottom_toTopOf="@+id/etName"
-        tools:layout_editor_absoluteX="30dp" />
+        tools:layout_editor_absoluteX="30dp">
+
+    </TextView>
 
     <TextView
         android:id="@+id/textView4"
