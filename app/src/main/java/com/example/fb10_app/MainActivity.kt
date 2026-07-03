@@ -10,13 +10,53 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.appcompat.widget.Toolbar
+import android.widget.Toast
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import com.google.android.material.navigation.NavigationView
+import android.view.Menu
+import android.view.MenuItem
+
+
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+        val drawerLayout = findViewById<DrawerLayout>(R.id.drawerLayout)
+        val navigationView = findViewById<NavigationView>(R.id.navigationView)
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        toolbar.setNavigationOnClickListener {
+            drawerLayout.openDrawer(GravityCompat.START)
+        }
+        navigationView.setNavigationItemSelectedListener { item ->
+
+            when (item.itemId) {
+
+                R.id.nav_home -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, HomeFragment())
+                        .commit()
+                }
+
+                R.id.nav_dashboard -> {
+                    Toast.makeText(this, "Dashboard", Toast.LENGTH_SHORT).show()
+                }
+
+                R.id.nav_notification -> {
+                    Toast.makeText(this, "Notifications", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            drawerLayout.closeDrawer(GravityCompat.START)
+            true
+        }
+
+
 
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, HomeFragment())
@@ -24,12 +64,13 @@ class MainActivity : AppCompatActivity() {
 
         bottomNav.setOnItemSelectedListener {
 
-            when(it.itemId){
+            when (it.itemId) {
 
                 R.id.home -> {
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, HomeFragment())
                         .commit()
+                    toolbar.title = "Home"
                     true
                 }
 
@@ -37,6 +78,7 @@ class MainActivity : AppCompatActivity() {
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, AboutFragment())
                         .commit()
+                    toolbar.title = "About"
                     true
                 }
 
@@ -44,6 +86,7 @@ class MainActivity : AppCompatActivity() {
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, AccountFragment())
                         .commit()
+                    toolbar.title = "Account"
                     true
                 }
 
@@ -95,4 +138,48 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.topnav, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        return when (item.itemId) {
+
+            R.id.action_search -> {
+                Toast.makeText(this, "Search", Toast.LENGTH_SHORT).show()
+                true
+            }
+
+            R.id.action_notification -> {
+                Toast.makeText(this, "Notifications", Toast.LENGTH_SHORT).show()
+                true
+            }
+
+            R.id.action_account -> {
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, AccountFragment())
+                    .commit()
+                true
+            }
+
+            R.id.action_settings -> {
+                Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show()
+                true
+            }
+
+            R.id.action_help -> {
+                Toast.makeText(this, "Help", Toast.LENGTH_SHORT).show()
+                true
+            }
+
+            R.id.action_logout -> {
+                Toast.makeText(this, "Logout", Toast.LENGTH_SHORT).show()
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
 }
