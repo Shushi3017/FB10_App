@@ -9,4 +9,8 @@
     <color name="yellow">#FFF200</color>
     <color name="white"> #FFFFFF </color>
     <color name="darkgray">#6E6F71</color>
+    <color name="vlyellow">#FFF44F</color>
+    <color name="pastelyellow">#FFF700</color>
+    <color name="slchiffon">#FFFACD</color>
+    <color name="LCyellow">#FFFFE0</color>
 </resources>
