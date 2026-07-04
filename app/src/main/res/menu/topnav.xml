@@ -10,28 +10,14 @@
         app:showAsAction="ifRoom"/>
 
     <item
-        android:id="@+id/action_notification"
-        android:icon="@drawable/ic_notification"
-        android:title="Notification"
-        app:showAsAction="ifRoom"/>
-
-    <item
-        android:id="@+id/action_account"
-        android:icon="@drawable/ic_account"
-        android:title="Account"
-        app:showAsAction="ifRoom"/>
-
-    <item
         android:id="@+id/action_settings"
         android:title="Settings"/>
-
-
-    <item
-        android:id="@+id/action_help"
-        android:title="Help"/>
 
     <item
         android:id="@+id/action_logout"
         android:title="Logout"/>
+    <item
+        android:id="@+id/exit"
+        android:title="Exit"/>
 
 </menu>

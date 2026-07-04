@@ -69,6 +69,7 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        createNotificationChannel()
         //Set the default fragment when app loads
         if(savedInstanceState == null)
             binding.bottomNav.selectedItemId = R.id.btn_home
@@ -146,4 +147,5 @@ class MainActivity : AppCompatActivity() {
         // createNotificationChannel()
 
     }
+
 }

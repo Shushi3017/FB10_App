@@ -1,6 +1,11 @@
 package com.example.fb10_app
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.view.MotionEvent
 import android.widget.Button
@@ -11,9 +16,16 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.materialswitch.MaterialSwitch
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
+import android.Manifest
+import android.content.Context
+import androidx.activity.result.contract.ActivityResultContracts
 
 class RegistrationPage : AppCompatActivity() {
     private fun setupPasswordToggle(
@@ -54,14 +66,15 @@ class RegistrationPage : AppCompatActivity() {
             false
         }
     }
+
 private val registeredFullName = mutableListOf<String>()
     override fun onCreate(savedInstanceState: Bundle?) {
-
-
         super.onCreate(savedInstanceState)
+        val prefs = getSharedPreferences("ThemePrefs", MODE_PRIVATE)
 
         enableEdgeToEdge()
         setContentView(R.layout.activity_registration_page)
+        createNotificationChannel()
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -80,7 +93,7 @@ private val registeredFullName = mutableListOf<String>()
         val password = findViewById<EditText>(R.id.etPassword)
         val confirmPassword = findViewById<EditText>(R.id.editTextTextPassword2)
 
-
+        setupPasswordToggle(password, confirmPassword)
         if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
 
             registrationBtn.setBackgroundColor(Color.parseColor("#7B1FA2"))
@@ -132,13 +145,18 @@ private val registeredFullName = mutableListOf<String>()
             confirmPassword.setBackgroundResource(R.drawable.input_custom)
 
         }
-        setupPasswordToggle(password, confirmPassword)
+        themeSwitch.isChecked = prefs.getBoolean("dark_mode", false)
         themeSwitch.setOnCheckedChangeListener { _, isChecked ->
+            prefs.edit().putBoolean("dark_mode", isChecked).apply()
+            AppCompatDelegate.setDefaultNightMode(
             if (isChecked) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                AppCompatDelegate.MODE_NIGHT_YES
             } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            }
+                AppCompatDelegate.MODE_NIGHT_NO
+            })
+
+
+
             /* for animation only hehe   // fade out (smooth disappearance)
             mainLayout.animate()
                 .alpha(0f)
@@ -194,13 +212,95 @@ private val registeredFullName = mutableListOf<String>()
                 Toast.makeText(this, "Your Password is not match", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
+             val prefs = getSharedPreferences("UserData",MODE_PRIVATE)
+            prefs.edit().apply{
+                putString("fullname",inputname)
+                putString("email",inputemail)
+                apply()
+            }
+            checkNotificationPermission()
             registeredFullName.add(inputname)
-            Toast.makeText(this, "Successfully Registered", Toast.LENGTH_SHORT).show()
+
             fullName.text.clear()
             email.text.clear()
             password.text.clear()
             confirmPassword.text.clear()
+    //        showNotification()
+      //      showSuccessNotification()
+
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
         }
 
+    }
+    private val channelId = "registration_channel"
+    private var notificationId = 1
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { granted ->
+            if (granted) {
+                sendRegistrationNotification()
+                goToMainActivity()
+            } else {
+                Toast.makeText(this, "Notification permission denied", Toast.LENGTH_SHORT).show()
+                goToMainActivity()
+            }
+        }
+    private fun createNotificationChannel() {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+            val channel = NotificationChannel(
+                channelId,
+                "Registration Notification",
+                NotificationManager.IMPORTANCE_HIGH
+            )
+
+            channel.description = "Shows registration success notifications"
+
+            getSystemService(NotificationManager::class.java)
+                .createNotificationChannel(channel)
+        }
+    }
+    private fun sendRegistrationNotification() {
+
+        val notification = NotificationCompat.Builder(this, channelId)
+            .setSmallIcon(R.mipmap.ic_launcher)
+            .setContentTitle("Registration Successful")
+            .setContentText("Welcome! Your registration has been completed successfully.")
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setDefaults(NotificationCompat.DEFAULT_ALL)
+            .setAutoCancel(true)
+            .build()
+
+        getSystemService(NotificationManager::class.java)
+            .notify(notificationId++, notification)
+    }
+    private fun checkNotificationPermission() {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+
+            requestPermissionLauncher.launch(
+                Manifest.permission.POST_NOTIFICATIONS
+            )
+
+        } else {
+
+            sendRegistrationNotification()
+            goToMainActivity()
+
+        }
+    }
+    private fun goToMainActivity() {
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
     }
 }

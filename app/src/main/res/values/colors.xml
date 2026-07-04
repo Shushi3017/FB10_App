@@ -4,7 +4,7 @@
     <attr name="backgroundColor" format="color" />
 
     <!-- Existing color definitions -->
-    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_200">#008080</color>
     <color name="black"> #000000 </color>
     <color name="yellow">#FFF200</color>
     <color name="white"> #FFFFFF </color>

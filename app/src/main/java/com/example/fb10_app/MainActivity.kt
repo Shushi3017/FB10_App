@@ -1,5 +1,7 @@
 package com.example.fb10_app
 
+import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.animation.AlphaAnimation
 import android.widget.TextView
@@ -17,35 +19,66 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import android.view.Menu
 import android.view.MenuItem
-
+import com.google.android.material.search.SearchView
 
 
 class MainActivity : AppCompatActivity() {
+ private lateinit var toolbar: Toolbar
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        val prefs = getSharedPreferences("ThemePrefs", MODE_PRIVATE)
+
+        if (prefs.getBoolean("dark_mode", false)) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
+
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+
+        toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        toolbar.title = prefs.getString("toolbar_title", "Home")
+
+
+        if (prefs.getBoolean("dark_mode", false)) {
+            toolbar.setBackgroundColor(Color.parseColor("#1E293B"))
+
+        } else {
+            toolbar.setBackgroundColor(Color.parseColor("#2E7D32"))
+
+        }
+
+        val themeSwitch = findViewById<MaterialSwitch>(R.id.themeSwitch)
+        themeSwitch.isChecked = prefs.getBoolean("dark_mode", false)
+        themeSwitch.setOnCheckedChangeListener { _, isChecked ->
+
+            prefs.edit().putBoolean("dark_mode", isChecked).apply()
+            prefs.edit().putString("toolbar_title", toolbar.title.toString()).apply()
+
+            if (isChecked) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+        }
+
+
+
         val drawerLayout = findViewById<DrawerLayout>(R.id.drawerLayout)
         val navigationView = findViewById<NavigationView>(R.id.navigationView)
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+
+
         toolbar.setNavigationOnClickListener {
             drawerLayout.openDrawer(GravityCompat.START)
         }
         navigationView.setNavigationItemSelectedListener { item ->
 
             when (item.itemId) {
-
-                R.id.nav_home -> {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, HomeFragment())
-                        .commit()
-                }
-
-                R.id.nav_dashboard -> {
-                    Toast.makeText(this, "Dashboard", Toast.LENGTH_SHORT).show()
-                }
 
                 R.id.nav_notification -> {
                     Toast.makeText(this, "Notifications", Toast.LENGTH_SHORT).show()
@@ -58,9 +91,11 @@ class MainActivity : AppCompatActivity() {
 
 
 
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, HomeFragment())
-            .commit()
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, HomeFragment())
+                .commit()
+        }
 
         bottomNav.setOnItemSelectedListener {
 
@@ -101,41 +136,7 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 //variables
-        val themeSwitch = findViewById<MaterialSwitch>(R.id.themeSwitch)
-        val themeStatusText = findViewById<TextView>(R.id.themeStatusText)
-        val currentMode = AppCompatDelegate.getDefaultNightMode()
-        if (currentMode == AppCompatDelegate.MODE_NIGHT_YES) {
-            themeSwitch.isChecked = true
-            themeStatusText.text = "Dark Mode Active"
-        } else {
-            themeSwitch.isChecked = false
-            themeStatusText.text = "Light Mode Active"
-        }
 
-        themeSwitch.setOnCheckedChangeListener { _, isChecked ->
-            //quick animation for fade in and fadeout
-            val fadeOut = AlphaAnimation(1.0f, 0.0f).apply {
-                duration = 200 // Time in milliseconds
-                fillAfter = true
-            }
-            themeStatusText.startAnimation(fadeOut)
-
-            //  Schedule theme change right after text fades out
-            themeStatusText.postDelayed({
-                if (isChecked) {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                } else {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                }
-
-
-                overrideActivityTransition(
-                    OVERRIDE_TRANSITION_CLOSE,
-                    android.R.anim.fade_in,
-                    android.R.anim.fade_out
-                )
-            }, 200)
-        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -152,30 +153,21 @@ class MainActivity : AppCompatActivity() {
                 true
             }
 
-            R.id.action_notification -> {
-                Toast.makeText(this, "Notifications", Toast.LENGTH_SHORT).show()
-                true
-            }
-
-            R.id.action_account -> {
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, AccountFragment())
-                    .commit()
-                true
-            }
-
             R.id.action_settings -> {
                 Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show()
                 true
             }
 
-            R.id.action_help -> {
-                Toast.makeText(this, "Help", Toast.LENGTH_SHORT).show()
-                true
-            }
 
             R.id.action_logout -> {
+                val intent = Intent(this, RegistrationPage::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
                 Toast.makeText(this, "Logout", Toast.LENGTH_SHORT).show()
+                true
+            }
+            R.id.exit -> {
+                finishAffinity()
                 true
             }
 
