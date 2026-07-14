@@ -1,0 +1,42 @@
+version: "3.9"
+
+services:
+  php:
+    build: .
+    container_name: fb10
+
+    ports:
+      - "7858:80"
+    volumes:
+      - ./php:/var/www/html
+    depends_on:
+      - mysql
+  mysql:
+    image: mysql:8.0
+    container_name: android_mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: android_sample
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./php/android_sample.sql:/docker-entrypoint-initdb.d/android_sample.sql
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: android_phpmyadmin
+    restart: always
+    depends_on:
+      - mysql
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: root
+      PMA_PASSWORD: root
+    ports:
+      - "6969:80"
+    volumes:
+      - ./phpmyadmin/config.inc.php:/etc/phpmyadmin/config.user.inc.php
+volumes:
+  mysql_data:
+
