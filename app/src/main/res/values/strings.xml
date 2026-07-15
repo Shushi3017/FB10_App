@@ -10,6 +10,12 @@
     <string name="et_conf_password">Confirm Password</string>
     <string name="btn_register">Register</string>
     <string name="tv_registration">Registration</string>
+    <string name="users">Users</string>
+    <string name="add_user">Add User</string>
+    <string name="edit_user">Edit User</string>
+    <string name="delete_user">Delete User</string>
+    <string name="save">Save</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="tv_name">FB 1 0</string>
 </resources>

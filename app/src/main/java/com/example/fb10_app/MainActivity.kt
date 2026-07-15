@@ -19,11 +19,15 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import android.view.Menu
 import android.view.MenuItem
+import com.example.fb10_app.databinding.ActivityMainBinding
 import com.google.android.material.search.SearchView
+import com.example.fb10_app.users.UserListActivity
 
 
 class MainActivity : AppCompatActivity() {
- private lateinit var toolbar: Toolbar
+
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var toolbar: Toolbar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val prefs = getSharedPreferences("ThemePrefs", MODE_PRIVATE)
@@ -36,9 +40,10 @@ class MainActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
+     binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        toolbar = findViewById(R.id.toolbar)
+        toolbar = binding.toolbar
         setSupportActionBar(toolbar)
         toolbar.title = prefs.getString("toolbar_title", "Home")
 
@@ -51,7 +56,7 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-        val themeSwitch = findViewById<MaterialSwitch>(R.id.themeSwitch)
+        val themeSwitch = binding.themeSwitch
         themeSwitch.isChecked = prefs.getBoolean("dark_mode", false)
         themeSwitch.setOnCheckedChangeListener { _, isChecked ->
 
@@ -68,9 +73,9 @@ class MainActivity : AppCompatActivity() {
 
 
 
-        val drawerLayout = findViewById<DrawerLayout>(R.id.drawerLayout)
-        val navigationView = findViewById<NavigationView>(R.id.navigationView)
-        val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+val drawerLayout = binding.drawerLayout
+        val navigationView = binding.navigationView
+        val bottomNav = binding.bottomNavigationView
 
 
         toolbar.setNavigationOnClickListener {
@@ -130,7 +135,7 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
@@ -145,9 +150,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
         return when (item.itemId) {
-
             R.id.action_search -> {
                 Toast.makeText(this, "Search", Toast.LENGTH_SHORT).show()
                 true
@@ -158,6 +161,13 @@ class MainActivity : AppCompatActivity() {
                 true
             }
 
+            R.id.action_users -> {
+                Toast.makeText(this, "Users clicked", Toast.LENGTH_LONG).show()
+
+                startActivity(Intent(this, UserListActivity::class.java))
+
+                true
+            }
 
             R.id.action_logout -> {
                 val intent = Intent(this, RegistrationPage::class.java)
@@ -166,6 +176,7 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "Logout", Toast.LENGTH_SHORT).show()
                 true
             }
+
             R.id.exit -> {
                 finishAffinity()
                 true

@@ -17,6 +17,11 @@
         android:id="@+id/action_logout"
         android:title="Logout"/>
     <item
+        android:id="@+id/action_users"
+        android:icon="@drawable/users"
+        android:title="@string/users"
+        app:showAsAction="never"/>
+    <item
         android:id="@+id/exit"
         android:title="Exit"/>
 
