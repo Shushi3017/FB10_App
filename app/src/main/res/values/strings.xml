@@ -10,6 +10,8 @@
     <string name="et_conf_password">Confirm Password</string>
     <string name="btn_register">Register</string>
     <string name="tv_registration">Registration</string>
+
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="tv_name">FB 1 0</string>
 </resources>
